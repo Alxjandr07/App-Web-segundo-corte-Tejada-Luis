@@ -35,6 +35,7 @@
 **b) El proyecto base expone `GET /api/v1/autores` y guarda el estado de la sesión del usuario solo en el JWT que el cliente envía en cada petición. Explique qué restricción concreta se está cumpliendo con esa decisión y qué consecuencia práctica tiene para escalar el sistema a varios servidores detrás de un balanceador. (3 puntos)**
 
 **Respuesta:**
+Se cumple la restricción *stateless* (sin estado): el servidor no guarda ninguna sesión y cada petición debe transportar toda la información necesaria, aquí el JWT que `JwtAuthenticationFilter` valida en cada llamada. Consecuencia práctica: cualquier réplica detrás del balanceador puede atender cualquier petición porque no hay estado que compartir; el sistema escala añadiendo servidores sin *sticky sessions* ni caché de sesión distribuida.
 
 
 
