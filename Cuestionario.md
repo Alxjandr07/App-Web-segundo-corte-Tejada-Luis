@@ -51,8 +51,9 @@ La restricción opcional es *Code on Demand*. Ejemplo real: una API web que entr
 **a) Un JWT tiene tres partes separadas por puntos. Nómbrelas en orden e indique qué contiene cada una. (3 puntos)**
 
 **Respuesta:**
-
-
+1. **Header**: metadatos de la firma, típicamente `alg` (algoritmo, ej. HS512) y `typ`.
+2. **Payload**: los *claims* (afirmaciones) del usuario — en `JwtService` se emiten `sub` (usuario), `rol`, `jti` (id único), `iat` y `exp` (expiración).
+3. **Firma (Signature)**: resultado de firmar header+payload con el secreto (HS512 aquí), para garantizar integridad y autenticidad.
 
 **b) Un compañero afirma: «como el JWT va firmado, puedo guardar en el *payload* la contraseña del usuario sin riesgo». Explique por qué está equivocado, precisando la diferencia entre firmar y cifrar. (2 puntos)**
 
