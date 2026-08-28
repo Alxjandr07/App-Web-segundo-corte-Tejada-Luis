@@ -86,8 +86,8 @@ Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y
 **b) El Servicio de Rentas Internas del Ecuador expone la autorización de comprobantes electrónicos mediante servicios SOAP. Explique dos razones técnicas por las que una institución de ese tipo mantiene SOAP en lugar de migrar a REST. (3 puntos)**
 
 **Respuesta:**
-
-
+1. **Contrato formal y estándares tributarios**: el WS-Security/SOAP permite adherir firma electrónica (XAdES) y *no repudio* dentro del propio mensaje, requisitos legales del SRI y del estándar de facturación electrónica del Ecuador.
+2. **Interoperabilidad con sistemas heredados y reglas normativas ya establecidas**: el esquema XSD/WSDL garantiza validación estricta y funciona igual con cualquier plataforma (Java, .NET, mainframe), y migrar implicaría renegociar los protocolos y pruebas con miles de contribuyentes, con alto coste y riesgo fiscal.
 
 ---
 
