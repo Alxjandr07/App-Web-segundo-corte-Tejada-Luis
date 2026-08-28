@@ -106,8 +106,7 @@ Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y
 **b) Justifique técnicamente por qué el TTL de `openlibrary` es doce veces mayor que el de `libros`, y qué criterio general debe guiar la elección de un TTL. (3 puntos)**
 
 **Respuesta:**
-
-
+Porque los metadatos que devuelve Open Library para un ISBN (título, portada, número de páginas, fecha de publicación) son muy estables y cambian raramente, mientras el catálogo local (`libros`, con ejemplares disponibles) muta con frecuencia (préstamos, altas, bajas), por lo que debe refrescarse cada poco. El criterio general: el TTL debe ser proporcional a la **volatilidad del dato** — a menor volatilidad, mayor TTL — y debe equilibrar la actualidad de la información contra la carga de peticiones al origen.
 
 **c) Explique por qué nunca debe almacenarse en caché la respuesta de un fallo del servicio externo, y describa qué le ocurriría al sistema si se hiciera. (2 puntos)**
 
