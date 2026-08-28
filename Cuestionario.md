@@ -98,8 +98,10 @@ Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y
 **a) Describa el patrón *cache-aside* en sus cuatro pasos, desde que llega la petición hasta que se responde. (3 puntos)**
 
 **Respuesta:**
-
-
+1. Llega la petición y la aplicación consulta primero la caché por la clave (el ISBN en `openlibrary`).
+2. Si hay *hit*, se devuelve el valor en caché sin tocar el origen.
+3. Si hay *miss*, se consulta la fuente real (la API de Open Library, o la BD para `libros`).
+4. Se escribe el resultado en la caché con su TTL y se responde al cliente; al modificar el dato, se invalida la clave para que la próxima lectura vuelva a poblar.
 
 **b) Justifique técnicamente por qué el TTL de `openlibrary` es doce veces mayor que el de `libros`, y qué criterio general debe guiar la elección de un TTL. (3 puntos)**
 
