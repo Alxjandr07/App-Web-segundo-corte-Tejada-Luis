@@ -123,18 +123,17 @@ Para cada escenario indique el código HTTP correcto y explique en una línea po
 
 | # | Escenario | Código | Justificación (una línea) |
 |---|---|---|---|
-| a | `GET /api/v1/libros/999999` y ese identificador no existe | | |
-| b | `POST /api/v1/libros` sin cabecera `Authorization` | | |
-| c | Usuario autenticado con rol `LECTOR` envía `POST /api/v1/libros` | | |
-| d | `POST /api/v1/libros` con el campo `titulo` vacío | | |
-| e | Prestar un libro a un socio que ya tiene tres préstamos activos | | |
-| f | La API de Open Library no responde dentro del *timeout* configurado | | |
+| a | `GET /api/v1/libros/999999` y ese identificador no existe | 404 | El recurso solicitado no existe. |
+| b | `POST /api/v1/libros` sin cabecera `Authorization` | 401 | La petición llega sin credenciales, no está autenticada (el `authenticationEntryPoint` responde 401). |
+| c | Usuario autenticado con rol `LECTOR` envía `POST /api/v1/libros` | 403 | Está autenticado pero `@PreAuthorize("hasRole('ADMIN')")` le deniega el permiso (prohibido). |
+| d | `POST /api/v1/libros` con el campo `titulo` vacío | 400 | Falla la validación `@Valid`; la solicitud está malformada. |
+| e | Prestar un libro a un socio que ya tiene tres préstamos activos | 409 | Conflicto con la regla de negocio (límite de préstamos activos). |
+| f | La API de Open Library no responde dentro del *timeout* configurado | 504 | El componente *upstream* no respondió a tiempo (Gateway Timeout). |
 
 **g) Explique por qué devolver `200 OK` con un cuerpo `{"success": false}` es un error de diseño, y qué restricción de REST se incumple al hacerlo. (2 puntos)**
 
 **Respuesta:**
-
-
+Es un error porque el código de estado debe representar el resultado de la operación; devolver `200 OK` con `success:false` obliga al cliente a inspeccionar el cuerpo para saber si hubo éxito, rompiendo la *interfaz uniforme* (en concreto, la semántica de los códigos de estado como mensajes autodescriptivos). Conduciría, además, a clientes que tratan como éxito un fallo y a respuestas de error sin formatos normalizados como Problem Details.
 
 ---
 
