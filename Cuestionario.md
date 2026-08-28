@@ -42,8 +42,7 @@ Se cumple la restricción *stateless* (sin estado): el servidor no guarda ningun
 **c) De las seis restricciones, indique cuál es opcional y dé un ejemplo real de una API que la use. (2 puntos)**
 
 **Respuesta:**
-
-
+La restricción opcional es *Code on Demand*. Ejemplo real: una API web que entrega fragmentos JavaScript ejecutables, como la que sirve Google Maps en el navegador al descargar dinámicamente scripts/plugins según la interacción, o una API de un gestor de documentos que devuelve una fórmula de cálculo a ejecutar en el cliente.
 
 ---
 
