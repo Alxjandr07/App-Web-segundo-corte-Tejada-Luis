@@ -63,7 +63,7 @@ Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y
 **c) El JWT es *stateless* por diseño, lo que genera un problema conocido: no se puede invalidar un token antes de que expire. Describa dos estrategias distintas para revocarlo y señale la desventaja de cada una. (3 puntos)**
 
 **Respuesta:**
-1. **Lista negra de `jti`**: el servidor guarda los identificadores revocados (y su expiración) en la base de datos; el filtro los consulta y rechaza el token. *Desventaja*: reintroduce estado en el servidor (se pierde el *statelessness*) y añade una consulta extra por petición; si el nodo cae, pierde la lista.
+1. **Lista negra de `jti`**: el servidor guarda los identificadores revocados en la base de datos; el filtro los consulta y rechaza el token. *Desventaja*: reintroduce estado en el servidor (se pierde el *statelessness*) y añade una consulta extra por petición; si el nodo cae, pierde la lista.
 2. **Tokens de vida corta + *refresh token***: se reduce el TTL (`expiracion-minutos`) para que un token comprometido quede inútil pronto y se renueva con un *refresh token* de mayor duración. *Desventaja*: aumenta el tráfico de login/renovación y obliga a proteger y revocar el propio *refresh token*, que también puede ser robado.
 
 ---
