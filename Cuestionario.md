@@ -12,10 +12,10 @@
 
 | Campo | Valor |
 |---|---|
-| Apellidos y nombres  Tejada Bajaña Luis Alejandro| |
-| Número de carnet 1207432939| |
-| Correo institucional  ltejadab@uteq.edu.ec| |
-| Fecha  28 de Agosto de 2026| |
+| Apellidos y nombres  | Tejada Bajaña Luis Alejandro |
+| Número de carnet | 1207432939 |
+| Correo institucional  | ltejadab@uteq.edu.ec |
+| Fecha  | 28 de Agosto de 2026 |
 | URL del repositorio | |
 
 ---
