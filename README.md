@@ -35,21 +35,32 @@ Todo lo correspondiente a las Unidades I a III **ya está implementado y probado
 ## 2. Arranque
 
 ### Requisitos
-- JDK 25 y Maven (IntelliJ IDEA los trae; verifique con `java -version` y `mvn -version`).
+- **JDK 25 o superior** (el proyecto compila con `--release 25`; verifique con `java -version` que el `JAVA_HOME` apunte a un JDK ≥ 25. Un JDK inferior fallará con `release version 25 not supported` y el criterio de piso 2 pondría CERO).
+- Maven 3.9.x (IntelliJ IDEA los trae; verifique con `mvn -version`).
 - Docker Desktop en ejecución (lo necesitan PostgreSQL, Redis y Testcontainers).
 
-### Pasos
+### Clonar y compilar (criterio de piso 2)
+
+Ejecute desde la carpeta donde quiere dejar el proyecto:
 
 ```bash
-git clone <url-de-su-repositorio>
-cd biblioteca-u4-base
+git clone https://github.com/Alxjandr07/App-Web-segundo-corte-Tejada-Luis.git
+cd App-Web-segundo-corte-Tejada-Luis
 
 cp .env.example .env
 # Genere el secreto del JWT y péguelo en .env como JWT_SECRETO:
 openssl rand -base64 48
 
+# Verificacion de compilacion (misma orden que el criterio de piso 2 del examen):
+mvn -B clean package -DskipTests
+```
+
+> `mvn -B clean package -DskipTests` debe terminar en **BUILD SUCCESS**. Si un JDK por defecto antiguo hace que falle, ajuste el `JAVA_HOME` a un JDK ≥ 25.
+
+### Levantar la aplicación
+
+```bash
 docker compose up -d postgres redis
-mvn clean verify
 mvn spring-boot:run
 ```
 
@@ -61,7 +72,7 @@ mvn spring-boot:run
 | Salud | http://localhost:8080/actuator/health |
 
 ### Abrir en IntelliJ IDEA
-`File → Open` y seleccione la carpeta del proyecto (no el `pom.xml` suelto). IntelliJ detecta Maven e importa las dependencias. Fije el SDK del proyecto en 25 desde `File → Project Structure → Project`.
+`File → Open` y seleccione la carpeta del proyecto (no el `pom.xml` suelto). IntelliJ detecta Maven e importa las dependencias. Fije el SDK del proyecto en 25 o superior desde `File → Project Structure → Project`.
 
 ---
 
