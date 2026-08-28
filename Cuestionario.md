@@ -16,7 +16,7 @@
 | Número de carnet | 1207432939 |
 | Correo institucional  | ltejadab@uteq.edu.ec |
 | Fecha  | 28 de Agosto de 2026 |
-| URL del repositorio | |
+| URL del repositorio | https://github.com/Alxjandr07/App-Web-segundo-corte-Tejada-Luis |
 
 ---
 
@@ -24,12 +24,12 @@
 
 **a) Enuncie las seis restricciones del estilo arquitectónico REST según Fielding. (3 puntos)**
 
-1.
-2.
-3.
-4.
-5.
-6.
+1. Cliente-servidor (Client-Server).
+2. Sin estado (Stateless).
+3. Cacheable (almacenable en caché).
+4. Interfaz uniforme (Uniform Interface).
+5. Sistema en capas (Layered System).
+6. Código bajo demanda (Code on Demand) — la única opcional.
 
 
 **b) El proyecto base expone `GET /api/v1/autores` y guarda el estado de la sesión del usuario solo en el JWT que el cliente envía en cada petición. Explique qué restricción concreta se está cumpliendo con esa decisión y qué consecuencia práctica tiene para escalar el sistema a varios servidores detrás de un balanceador. (3 puntos)**
