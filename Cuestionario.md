@@ -24,8 +24,12 @@
 
 **a) Enuncie las seis restricciones del estilo arquitectónico REST según Fielding. (3 puntos)**
 
-**Respuesta:**
-
+1.
+2.
+3.
+4.
+5.
+6.
 
 
 **b) El proyecto base expone `GET /api/v1/autores` y guarda el estado de la sesión del usuario solo en el JWT que el cliente envía en cada petición. Explique qué restricción concreta se está cumpliendo con esa decisión y qué consecuencia práctica tiene para escalar el sistema a varios servidores detrás de un balanceador. (3 puntos)**
