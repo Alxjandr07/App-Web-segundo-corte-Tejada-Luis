@@ -111,8 +111,7 @@ Porque los metadatos que devuelve Open Library para un ISBN (título, portada, n
 **c) Explique por qué nunca debe almacenarse en caché la respuesta de un fallo del servicio externo, y describa qué le ocurriría al sistema si se hiciera. (2 puntos)**
 
 **Respuesta:**
-
-
+Un fallo (timeout, 4xx/5xx) no es un dato válido; guardarlo en caché "congelaría" el error durante el TTL. Si el servicio externo se recupera, la caché seguiría sirviendo el error a todos los clientes hasta que expirara, y además los reintentos fallidos se repetirían contra una caché que nunca se refresca, degradando la disponibilidad percibida y ocultando la recuperación del origen.
 
 ---
 
