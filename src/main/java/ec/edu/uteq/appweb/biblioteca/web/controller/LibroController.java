@@ -1,8 +1,11 @@
 package ec.edu.uteq.appweb.biblioteca.web.controller;
 
 import ec.edu.uteq.appweb.biblioteca.domain.Libro;
+import ec.edu.uteq.appweb.biblioteca.integration.OpenLibraryClient;
+import ec.edu.uteq.appweb.biblioteca.integration.OpenLibraryResponse;
 import ec.edu.uteq.appweb.biblioteca.service.LibroService;
 import ec.edu.uteq.appweb.biblioteca.web.dto.ApiResponse;
+import ec.edu.uteq.appweb.biblioteca.web.dto.LibroEnriquecidoResponse;
 import ec.edu.uteq.appweb.biblioteca.web.dto.LibroRequest;
 import ec.edu.uteq.appweb.biblioteca.web.dto.LibroResponse;
 import ec.edu.uteq.appweb.biblioteca.web.dto.PageMeta;
@@ -51,10 +54,12 @@ public class LibroController {
 
     private final LibroService servicio;
     private final LibroMapper mapper;
+    private final OpenLibraryClient openLibrary;
 
-    public LibroController(LibroService servicio, LibroMapper mapper) {
+    public LibroController(LibroService servicio, LibroMapper mapper, OpenLibraryClient openLibrary) {
         this.servicio = servicio;
         this.mapper = mapper;
+        this.openLibrary = openLibrary;
     }
 
     @GetMapping
@@ -71,6 +76,19 @@ public class LibroController {
     @GetMapping("/{id}")
     public ApiResponse<LibroResponse> buscar(@PathVariable Long id) {
         return ApiResponse.ok(mapper.aRespuesta(servicio.buscarPorId(id)), "Libro encontrado");
+    }
+
+    @GetMapping("/{id}/enriquecido")
+    public ApiResponse<LibroEnriquecidoResponse> enriquecido(@PathVariable Long id) {
+        Libro libro = servicio.buscarPorId(id);
+        OpenLibraryResponse externo = openLibrary.consultarPorIsbn(libro.getIsbn());
+        LibroEnriquecidoResponse cuerpo = new LibroEnriquecidoResponse(
+                mapper.aRespuesta(libro),
+                externo == null ? null : externo.title(),
+                externo == null ? null : externo.urlPortada(),
+                externo == null ? null : externo.number_of_pages(),
+                externo == null ? null : externo.publish_date());
+        return ApiResponse.ok(cuerpo, "Libro enriquecido con datos externos");
     }
 
     @PostMapping
