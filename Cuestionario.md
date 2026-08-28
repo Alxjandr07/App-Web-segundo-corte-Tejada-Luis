@@ -12,10 +12,10 @@
 
 | Campo | Valor |
 |---|---|
-| Apellidos y nombres | |
-| Número de carnet | |
-| Correo institucional | |
-| Fecha | |
+| Apellidos y nombres  Tejada Bajaña Luis Alejandro| |
+| Número de carnet 1207432939| |
+| Correo institucional  ltejadab@uteq.edu.ec| |
+| Fecha  28 de Agosto de 2026| |
 | URL del repositorio | |
 
 ---
@@ -138,6 +138,6 @@ Para cada escenario indique el código HTTP correcto y explique en una línea po
 
 Marque con una `x` y complete:
 
-- [ ] Declaro que estas respuestas son de mi autoría, redactadas durante la sesión de examen, sin asistencia de inteligencia artificial ni comunicación con terceros.
+- [x] Declaro que estas respuestas son de mi autoría, redactadas durante la sesión de examen, sin asistencia de inteligencia artificial ni comunicación con terceros.
 
-Firma (nombre completo): ______________________________
+Firma (nombre completo): Tejada Bajaña Luis Alejandro
