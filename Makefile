@@ -1,4 +1,4 @@
-.PHONY: up down logs build test verify psql redis-keys clean checkpoint historial
+.PHONY: up down logs build test verify psql redis-keys informe clean checkpoint historial
 
 up:            ## Levanta postgres, redis y la aplicacion
 	docker compose up -d --build
@@ -23,6 +23,9 @@ psql:          ## Abre una consola SQL contra la base
 
 redis-keys:    ## Evidencia de la cache de la API externa (TODO-U4-4)
 	docker compose exec redis redis-cli KEYS "openlibrary*"
+
+informe:       ## Compila el informe LaTeX (docs/informe.tex -> docs/informe.pdf)
+	cd docs && pdflatex -interaction=nonstopmode informe.tex && bibtex informe && pdflatex -interaction=nonstopmode informe.tex && pdflatex -interaction=nonstopmode informe.tex
 
 checkpoint:    ## Commit de control cuando el docente lo indique: make checkpoint M="lo que hice"
 	git add -A

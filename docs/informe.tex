@@ -1,0 +1,140 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codigo}{RGB}{235,235,235}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codigo},
+  breaklines=true,
+  frame=single
+}
+
+\title{Examen Unidad IV\\
+  Aplicaciones Web}
+\author{Tejada Bajaña Luis Alejandro}
+\date{28 de Agosto de 2026}
+
+\begin{document}
+
+% ==================== CARATULA ====================
+\begin{titlepage}
+  \centering
+
+  {\Large \textbf{UNIVERSIDAD TÉCNICA ESTATAL DE QUEVEDO}}\\[0.4cm]
+  {\large Facultad de Ciencias de la Computación y Diseño Digital}\\[0.2cm]
+  {\large Carrera de Ingeniería de Software (Rediseño)}\\[1.2cm]
+
+  \rule{\textwidth}{0.5pt}\\[0.6cm]
+  {\LARGE \textbf{Examen Teórico-Práctico --- Unidad IV}}\\[0.3cm]
+  {\Large \textbf{Modelo Vista Controlador y Servicios Web:\newline
+  API REST, Autenticación JWT y Consumo de APIs Externas}}\\[0.6cm]
+  \rule{\textwidth}{0.5pt}\\[1.2cm]
+
+  {\large \textbf{Asignatura:} Aplicaciones Web (Quinto nivel, Paralelo A)}\\[0.4cm]
+  {\large \textbf{Docente:} Dr. Gleiston Cicerón Guerrero Ulloa, Ph.D.}\\[0.4cm]
+  {\large \textbf{Periodo:} 2026--2027 PPA}\\[1.2cm]
+
+  {\Large \textbf{Estudiante:} Tejada Bajaña Luis Alejandro}\\[0.4cm]
+  {\large \textbf{Número de carnet:} 1207432939}\\[0.4cm]
+  {\large \textbf{Correo institucional:} \texttt{ltejadab@uteq.edu.ec}}\\[0.4cm]
+  {\large \textbf{Fecha:} 28 de Agosto de 2026}\\[1.2cm]
+
+  \textbf{Repositorio (URL):}\\[0.2cm]
+  {\large \texttt{\url{https://github.com/Alxjandr07/App-Web-segundo-corte-Tejada-Luis}}}\\[1cm]
+
+  \vfill
+\end{titlepage}
+
+% ==================== SECCIONES ====================
+\section{Introducción}
+El presente informe documenta el desarrollo del examen de la Unidad IV de la
+asignatura Aplicaciones Web. El objetivo de la unidad es exponer la funcionalidad
+del catálogo bibliotecario como una \textbf{API REST} con autenticación por
+\textbf{JWT} (sin estado), así como el consumo de una \textbf{API externa}
+(Open Library) aplicando el patrón \emph{cache-aside} sobre Redis y el manejo
+diferenciado de fallos.
+
+Todo el código fuente, el cuestionario teórico y las pruebas de integración se
+encuentran versionados en el repositorio indicado en la carátula.
+
+\section{Objetivos}
+\begin{itemize}
+  \item Exponer el catálogo como API REST respetando las restricciones de
+    Fielding y envolviendo las respuestas exitosas en \texttt{ApiResponse}.
+  \item Proteger las escrituras con roles mediante JWT \emph{stateless}.
+  \item Consumir la API externa de Open Library con caché y manejo de errores.
+  \item Verificar la solución con pruebas de integración.
+\end{itemize}
+
+\section{Desarrollo de la Parte B}
+
+\subsection{B1. Listado de libros con filtros y paginación}
+En \texttt{LibroController} se implementó el endpoint
+\texttt{GET /api/v1/libros}, que acepta los parámetros opcionales
+\texttt{titulo}, \texttt{categoriaId} y \texttt{anioDesde}, los delega a
+\texttt{LibroService.buscar(...)} y devuelve un \texttt{Page<Libro>} paginado.
+La respuesta se envuelve en \texttt{ApiResponse\{success, data, message, errors,
+meta\}}, donde \texttt{meta} proviene de \texttt{PageMeta}.
+
+\subsection{B2. Alta protegida por rol}
+El endpoint \texttt{POST /api/v1/libros} recibe un \texttt{LibroRequest}
+validado con \texttt{@Valid}. Un cuerpo inválido produce \texttt{400} en
+formato \emph{Problem Details} con el arreglo \texttt{errors} poblado. La
+creación correcta devuelve \texttt{201 Created} con la cabecera
+\texttt{Location}. La operación está protegida por \texttt{@PreAuthorize} para
+que solo el rol \texttt{ADMIN} pueda invocarla; un usuario con otro rol recibe
+\texttt{403} y una petición sin token recibe \texttt{401}.
+
+\subsection{B3. Consumo de la API externa con caché}
+\texttt{OpenLibraryClient.consultarPorIsbn(String isbn)} consume
+\texttt{https://openlibrary.org/isbn/\{isbn\}.json} con el bean
+\texttt{RestClient} ya configurado (con \emph{timeouts}). Aplica
+\texttt{@Cacheable} sobre el espacio \texttt{openlibrary} (TTL de 24 horas).
+Los fallos se tratan de forma diferenciada: un \texttt{404} del proveedor
+devuelve campos externos nulos y el endpoint responde \texttt{200} con el libro
+local; un \texttt{5xx}, un \texttt{4xx} distinto de \texttt{404} o un
+\emph{timeout} lanzan \texttt{ServicioExternoException}, convertida por el
+manejador global en \texttt{502}. Los fallos nunca se cachean.
+
+\subsection{B4. Pruebas de integración}
+Se escribieron pruebas de integración en \texttt{LibroControllerIT}, que
+heredan de \texttt{BaseIntegracionTest} y levantan un PostgreSQL real en un
+contenedor efímero con Testcontainers.
+
+\section{Resultados}
+\begin{itemize}
+  \item \texttt{mvn -B clean package -DskipTests} termina en \texttt{BUILD SUCCESS}.
+  \item \texttt{mvn -B test} deja las pruebas de integración en verde.
+  \item La caché de la API externa se evidencia con
+    \texttt{docker compose exec redis redis-cli KEYS "openlibrary*"}.
+\end{itemize}
+
+\section{Conclusiones}
+Se expuso y protegió el catálogo bibliotecario como una API REST con
+autenticación JWT sin estado, se consumió una API externa aplicando
+\emph{cache-aside} con manejo diferenciado de fallos y se verificó el
+cumplimiento de los objetivos con pruebas de integración. El código se
+encuentra disponible en el repositorio de la carátula.
+
+\begin{thebibliography}{9}
+\bibitem{fielding} R. T. Fielding, \emph{Architectural Styles and the Design of
+  Network-based Software Architectures}. Ph.D. dissertation, University of
+  California, Irvine, 2000.
+\bibitem{jwt} M. B. Jones, J. Bradley y S. Sakimura, \emph{JSON Web Token
+  (JWT)}, RFC 7519, IETF, mayo 2015.
+\bibitem{rfc9457} M. Nottingham, E. Wilde y S. Dalal, \emph{Problem Details for
+  HTTP APIs}, RFC 9457, IETF, julio 2023 (obsoleta RFC 7807).
+\bibitem{http} R. T. Fielding, M. Nottingham y J. Reschke, \emph{HTTP
+  Semantics}, RFC 9110, IETF, junio 2022.
+\end{thebibliography}
+
+\end{document}

@@ -192,7 +192,8 @@ El reporte de cobertura queda en `target/site/jacoco/index.html`.
 
 ## 8. Compilación del informe LaTeX (criterio de piso)
 
-Cuando agregue su informe en `docs/`, documente aquí la cadena exacta. Por ejemplo:
+El informe está en `docs/informe.tex` e incluye la carátula con la URL del
+repositorio en una sola línea. Se compila así:
 
 ```bash
 cd docs
@@ -202,4 +203,13 @@ pdflatex informe.tex
 pdflatex informe.tex
 ```
 
-Motor: `pdflatex`. Bibliografía: `bibtex`. Pasadas mínimas: 3. Sin esta documentación, y sin que el PDF se regenere desde el `.tex` clonando el repositorio, la calificación es CERO.
+O con un solo comando:
+
+```bash
+make informe    # compila docs/informe.tex y deja el PDF en docs/
+```
+
+Motor: `pdflatex`. Bibliografía: `bibtex`. Pasadas mínimas: 3. El PDF
+resultante (`docs/informe.pdf`) se genera desde el `.tex`, de modo que se
+regenera clonando este repositorio. Sin esta documentación, y sin que el PDF se
+regenere desde el `.tex` clonando el repositorio, la calificación es CERO.
