@@ -76,12 +76,12 @@ Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y
 
 | Criterio | SOAP | REST |
 |---|---|---|
-| Formato del mensaje | | |
-| Contrato de descripción | | |
-| Sobrecarga de serialización | | |
-| Tipado | | |
-| Facilidad de consumo desde un cliente móvil | | |
-| Manejo de errores | | |
+| Formato del mensaje | XML (SOAP envelope) | JSON principalmente (puede usar XML u otros) |
+| Contrato de descripción | WSDL (definido y formal) | Sin contrato formal; descripción opcional tipo OpenAPI |
+| Sobrecarga de serialización | Alta (envoltorio XML extenso) | Baja (JSON compacto) |
+| Tipado | Fuerte/tipado estricto (XSD) | Dinámico/débil |
+| Facilidad de consumo desde un cliente móvil | Menor (namespaces, WSDL) | Alta (ligero y simple de consumir) |
+| Manejo de errores | SOAP Fault (estándar) | Códigos de estado HTTP + Problem Details (RFC 9457) |
 
 **b) El Servicio de Rentas Internas del Ecuador expone la autorización de comprobantes electrónicos mediante servicios SOAP. Explique dos razones técnicas por las que una institución de ese tipo mantiene SOAP en lugar de migrar a REST. (3 puntos)**
 
