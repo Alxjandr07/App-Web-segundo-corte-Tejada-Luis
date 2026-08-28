@@ -58,8 +58,7 @@ La restricción opcional es *Code on Demand*. Ejemplo real: una API web que entr
 **b) Un compañero afirma: «como el JWT va firmado, puedo guardar en el *payload* la contraseña del usuario sin riesgo». Explique por qué está equivocado, precisando la diferencia entre firmar y cifrar. (2 puntos)**
 
 **Respuesta:**
-
-
+Está equivocado porque *firmar no es cifrar*: la firma solo aporta integridad y autenticidad (que el token no fue alterado y quién lo emitió), pero el header y el payload van en **Base64**, un simple codificado, legible por cualquiera sin el secreto. La confidencialidad exige *cifrado* (JWE), no firma (JWS). Una contraseña en el payload quedaría expuesta en claro para quien capture el token.
 
 **c) El JWT es *stateless* por diseño, lo que genera un problema conocido: no se puede invalidar un token antes de que expire. Describa dos estrategias distintas para revocarlo y señale la desventaja de cada una. (3 puntos)**
 
